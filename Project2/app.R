@@ -1,17 +1,18 @@
 library(shiny)
 library(httr)
 library(jsonlite)
-library(dplyr)
 library(ggplot2)
+library(dplyr)
 
+# Define the UI
 ui <- fluidPage(
-  titlePanel("Bandsintown API Data Explorer"),
+  titlePanel("Pokémon Data Explorer"),
   tabsetPanel(
     tabPanel("About", includeMarkdown("about.md")),
-    tabPanel("Data Download", 
+    tabPanel("Data Download",
              sidebarLayout(
                sidebarPanel(
-                 textInput("artist_name", "Artist Name:", value = "Coldplay"),
+                 textInput("pokemon_name", "Pokémon Name:", value = "pikachu"),
                  actionButton("query", "Query API")
                ),
                mainPanel(
@@ -19,7 +20,7 @@ ui <- fluidPage(
                )
              )
     ),
-    tabPanel("Data Exploration", 
+    tabPanel("Data Exploration",
              sidebarLayout(
                sidebarPanel(
                  selectInput("x_var", "X-axis Variable:", choices = NULL),
@@ -35,19 +36,48 @@ ui <- fluidPage(
   )
 )
 
+# Define the server logic
 server <- function(input, output, session) {
   observeEvent(input$query, {
-    # Construct the API endpoint URL using the input artist name
-    endpoint <- paste0("https://rest.bandsintown.com/artists/", input$artist_name, "/events?app_id=test")
+    # Construct the API endpoint URL using the input Pokémon name
+    endpoint <- paste0("https://pokeapi.co/api/v2/pokemon/", tolower(input$pokemon_name))
     
     # Make the GET request to the API
     response <- GET(endpoint)
     
+    # Check for errors in the API request
+    if (status_code(response) != 200) {
+      showModal(modalDialog(
+        title = "API Error",
+        paste("Failed to retrieve data from the API. Status code:", status_code(response)),
+        easyClose = TRUE,
+        footer = NULL
+      ))
+      return(NULL)
+    }
+    
     # Parse the JSON response into a list
     data <- fromJSON(content(response, "text"), flatten = TRUE)
     
-    # Convert the list to a data frame
-    df <- as.data.frame(data)
+    # Convert the relevant parts of the list to a data frame
+    df <- data.frame(
+      name = data$name,
+      base_experience = data$base_experience,
+      height = data$height,
+      weight = data$weight,
+      stringsAsFactors = FALSE
+    )
+    
+    # Add stats to the data frame
+    stats <- data.frame(
+      stat_name = sapply(data$stats, function(x) x$stat$name),
+      base_stat = sapply(data$stats, function(x) x$base_stat),
+      effort = sapply(data$stats, function(x) x$effort),
+      stringsAsFactors = FALSE
+    )
+    
+    # Combine the main data frame and stats data frame
+    df <- cbind(df, stats)
     
     # Display the data frame in the table output
     output$api_data <- renderTable({ df })
@@ -69,4 +99,5 @@ server <- function(input, output, session) {
   })
 }
 
+# Run the application
 shinyApp(ui, server)

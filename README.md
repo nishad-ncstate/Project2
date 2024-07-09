@@ -11,9 +11,18 @@ This Shiny app queries the Star Wars API (SWAPI) to retrieve and explore data fr
 - tidyr
 - DT
 
+## Install Packages
+
+
+```R install.packages(c("shiny", "httr", "jsonlite", "dplyr", "ggplot2", "tidyr", "DT"))
+
+## Run the App
+
+
+```R shiny::runGitHub("nishad-ncstate/project2")
+
+
+
+
 
 ## Install Packages and Run the App
-```R
-install.packages(c("shiny", "httr", "jsonlite", "dplyr", "ggplot2", "tidyr", "DT"))
-
-shiny::runGitHub("nishad-ncstate/project2")

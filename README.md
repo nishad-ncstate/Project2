@@ -1,4 +1,16 @@
-# Project2
-# This app queries the Bandsintown API to retrieve event data for a specified artist.
-# Required packages:  shiny, httr, jsonlite, dplyr, ggplot2.
-# install.packages(c("shiny", "httr", "jsonlite", "dplyr", "ggplot2"))
+# Star Wars Shiny App
+
+This Shiny app queries the Star Wars API (SWAPI) to retrieve and explore data from the Star Wars universe. Users can customize their queries, view and download data, and explore the data through various visualizations.
+
+## Required Packages
+- shiny
+- httr
+- jsonlite
+- dplyr
+- ggplot2
+- tidyr
+- DT
+
+## Install Packages
+```R
+install.packages(c("shiny", "httr", "jsonlite", "dplyr", "ggplot2", "tidyr", "DT"))

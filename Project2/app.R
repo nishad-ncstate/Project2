@@ -14,7 +14,7 @@ ui <- navbarPage(
              h1("Star Wars Data Explorer"),
              p("This app uses the Star Wars API (SWAPI) to allow users to explore data from the Star Wars universe."),
              p("Use the Data Download tab to query the API and download data. Use the Data Exploration tab to create visualizations and summaries of the data."),
-             img(src = "https://starwarsblog.starwars.com/wp-content/uploads/2018/02/SW_Helmet_DarthVader_Press-1-1536x864-748923093287.jpeg", height = "400px")
+             img(src = "https://upload.wikimedia.org/wikipedia/commons/6/6c/Star_Wars_Logo.svg", height = "400px")
            )),
   
   tabPanel("Data Download",
@@ -75,8 +75,12 @@ server <- function(input, output, session) {
   })
   
   output$data_table <- renderDT({
-    datatable(data())
+    datatable(data(), options = list(
+      pageLength = 10,
+      lengthMenu = c(10, 25, 50, 100)
+    ))
   })
+  
   
   output$download_data <- downloadHandler(
     filename = function() {

@@ -3,6 +3,7 @@ library(DT)
 library(ggplot2)
 library(dplyr)
 library(tidyr)
+
 source("api_functions.R")
 
 ui <- navbarPage(
@@ -20,7 +21,7 @@ ui <- navbarPage(
            fluidPage(
              sidebarLayout(
                sidebarPanel(
-                 selectInput("data_type", "Choose Data Type", choices = c("People", "Starships", "Films")),
+                 selectInput("data_type", "Choose Data Type", choices = c("People", "Starships", "Films", "Planets", "Species", "Vehicles")),
                  actionButton("query_data", "Query Data")
                ),
                mainPanel(
@@ -61,6 +62,12 @@ server <- function(input, output, session) {
       data(get_starships())
     } else if (input$data_type == "Films") {
       data(get_films())
+    } else if (input$data_type == "Planets") {
+      data(get_planets())
+    } else if (input$data_type == "Species") {
+      data(get_species())
+    } else if (input$data_type == "Vehicles") {
+      data(get_vehicles())
     }
     updateSelectInput(session, "x_var", choices = names(data()))
     updateSelectInput(session, "y_var", choices = names(data()))

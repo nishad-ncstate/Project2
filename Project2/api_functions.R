@@ -1,5 +1,3 @@
-#### Example `api_functions.R`
-
 library(httr)
 library(jsonlite)
 library(dplyr)
@@ -21,7 +19,7 @@ query_swapi <- function(endpoint, id = NULL, params = list()) {
   return(data)
 }
 
-# Example usage
+# Get people
 get_people <- function(page = 1) {
   data <- query_swapi("people", params = list(page = page))
   return(data$results)
@@ -36,5 +34,23 @@ get_starships <- function(page = 1) {
 # Get films
 get_films <- function() {
   data <- query_swapi("films")
+  return(data$results)
+}
+
+# Get planets
+get_planets <- function(page = 1) {
+  data <- query_swapi("planets", params = list(page = page))
+  return(data$results)
+}
+
+# Get species
+get_species <- function(page = 1) {
+  data <- query_swapi("species", params = list(page = page))
+  return(data$results)
+}
+
+# Get vehicles
+get_vehicles <- function(page = 1) {
+  data <- query_swapi("vehicles", params = list(page = page))
   return(data$results)
 }
